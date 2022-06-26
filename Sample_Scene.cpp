@@ -42,12 +42,6 @@ namespace example
     {
         suspended = false;
 
-        /*
-        state     = LOADING;
-        x         = 640;
-        y         = 360;
-         */
-
         return true;
     }
 
@@ -174,6 +168,7 @@ namespace example
 
                 if(joystickHandler.Pressed)
                 {
+                    canvas->set_color    (0.296875,0.59765625,0);
                     canvas->fill_rectangle(joystickHandler.Position, { 100, 100 });
 
                     if(joystickHandler.deltaPosition.coordinates.x() < joystickHandler.Position.coordinates.x() + joystickHandler.OuterRadius &&
@@ -187,6 +182,11 @@ namespace example
                             canvas->fill_rectangle(joystickHandler.deltaPosition, { 100, 100 });
                         }
                 }
+
+                else
+                    {
+                        canvas->set_color (1, 1, 1);
+                    }
 
                 playerBulletPool->render(*canvas);
 
@@ -298,6 +298,7 @@ namespace example
             }
         }
 
+        //
         if(playerCharacter->position.coordinates.x() < 0)
         {
             playerCharacter->position.coordinates.x() = canvas_width - 1;

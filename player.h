@@ -83,6 +83,7 @@ namespace PlayerRelated
         {
             //Size2f textureSize {playerTexture->get_width(), playerTexture->get_height()};
             Size2f size {width, height};
+            canvas.set_color(1,1,1);
             canvas.fill_rectangle (position, size);
             /*
             if(playerTexture)

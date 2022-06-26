@@ -85,6 +85,7 @@ namespace Enemies
             }
              */
 
+            canvas.set_color(0.796875,0,0);
             canvas.fill_rectangle(position, {width,height});
         }
 

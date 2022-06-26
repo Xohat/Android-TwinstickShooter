@@ -46,6 +46,7 @@ namespace Proyectile
         //Size2f textureSize {bulletTexture->get_width(), bulletTexture->get_height()};
         Size2f textureSize {width, height};
 
+        canvas.set_color(0.796875,0.796875,0);
         canvas.fill_rectangle (position, textureSize);
         /*
         if(bulletTexture)
