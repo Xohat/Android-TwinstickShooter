@@ -9,6 +9,7 @@
  */
 
 #include "bullet.h"
+#include "player.h"
 #include <memory>
 #include <basics/Scene>
 #include <basics/Vector>
@@ -31,6 +32,7 @@ namespace example
         {
             LOADING,
             RUNNING,
+            GAME_OVER,
         };
 
         State          state;
@@ -40,14 +42,17 @@ namespace example
         unsigned       canvas_height;
 
         Texture_Handle texture;
+        Texture_Handle buttonTexture;
         Texture_Handle enemyTexture;
         Texture_Handle playerTexture;
         Texture_Handle bulletTexture;
 
         Proyectile::bulletPool *playerBulletPool;
-        //std::vector<Enemies::enemy> enemies;
-        //std::vector<Proyectile::bullet> playerBulletPool;
         //Player::player playerCharacter;
+        bool shotReady = true;
+        float shotCooldown = 0.8;
+
+        //std::vector<Enemies::enemy> enemies;
 
         struct shootButton
         {
@@ -92,6 +97,7 @@ namespace example
 
         void load ();
         void run  (float time);
+        void gameOver();
 
     };
 

@@ -27,6 +27,7 @@ namespace example
         canvas_width  = 1280;
         canvas_height =  720;
         playerBulletPool = new Proyectile::bulletPool(16, canvas_width, canvas_height);
+        //playerCharacter = Player::player();
     }
 
     bool Sample_Scene::initialize ()
@@ -70,7 +71,12 @@ namespace example
                             {
                                 shootCircle.Pressed = true;
                                 shootCircle.ID = id;
-                                playerBulletPool->spawnBullet({10,50}, 90);
+
+                                if(shotReady)
+                                {
+                                    playerBulletPool->spawnBullet({10,50}, 90);
+                                    shotReady = false;
+                                }
                             }
                         }
                     }
@@ -91,8 +97,8 @@ namespace example
                     if(joystickHandler.Pressed)
                     {
                         joystickHandler.deltaPosition = Vector2f(x,y);
-                        //Vector2f playerMovement = Vector2f (joystickHandler.deltaPosition - joystickHandler.Position);
-                        //playerCharacter.position += playerMovement;
+                        Vector2f playerMovement = Vector2f (joystickHandler.deltaPosition - joystickHandler.Position);
+                        //playerCharacter->direction += playerMovement;
                     }
 
                     break;
@@ -132,14 +138,13 @@ namespace example
             if (canvas)
             {
                 canvas->clear        ();
-                canvas->set_color    (1, 1, 1);
-                canvas->draw_point   ({ 360, 360 });
-                canvas->draw_segment ({   0,   0 }, { 1280, 720 });
-                canvas->draw_segment ({   0, 720 }, { 1280,   0 });
+                Vector3f backgroundColor(0, 0.19921875, 0.3984375);
+                canvas->set_color    (backgroundColor[0], backgroundColor[1], backgroundColor[2]);
+                canvas->fill_rectangle({ 0, 0 }, { 1280, 720 });
 
                 if(shootCircle.Pressed)
                 {
-                    canvas->set_color    (128/256,128/256,128/256);
+                    canvas->set_color    (0.5,0.5,0.5);
                     canvas->fill_rectangle(shootCircle.Position, { 100, 100 });
                 }
 
@@ -169,12 +174,10 @@ namespace example
 
                 //playerCharacter.render(canvas);
 
-                /*
                 if(state == GAME_OVER)
                 {
                     canvas->fill_rectangle ({ canvas_width / 2.f, canvas_height / 2.f }, { 100, 60 });
                 }
-                 */
             }
         }
     }
@@ -187,12 +190,49 @@ namespace example
 
             if (context)
             {
+                int textureActivationCount = 0;
                 texture = Texture_2D::create (ID(test), context, "test.png");
+                buttonTexture = Texture_2D::create (ID(test), context, "test.png");
+                bulletTexture = Texture_2D::create (ID(test), context, "test.png");
+                playerTexture = Texture_2D::create (ID(test), context, "test.png");
+                enemyTexture = Texture_2D::create (ID(test), context, "test.png");
 
+                if(buttonTexture)
+                {
+                    context->add(buttonTexture);
+                    ++textureActivationCount;
+                }
+
+                if(bulletTexture)
+                {
+                    context->add(bulletTexture);
+                    ++textureActivationCount;
+                }
+
+                /*
                 if (texture)
                 {
                     context->add (texture);
+                    ++textureActivationCount;
+                }
 
+
+                if(playerTexture)
+                {
+                    context->add(playerTexture);
+                    //playerCharacter->setTexture(playerTexture);
+                    ++textureActivationCount;
+                }
+
+                if(enemyTexture)
+                {
+                    context->add(enemyTexture);
+                    ++textureActivationCount;
+                }
+                 */
+
+                if(textureActivationCount == 2)
+                {
                     state = RUNNING;
                 }
             }
@@ -202,6 +242,27 @@ namespace example
     void Sample_Scene::run (float time)
     {
         playerBulletPool->update(time);
+
+        if(!shotReady)
+        {
+            shotCooldown -= time;
+
+            if(shotCooldown <= 0)
+            {
+                shotCooldown = 0.8;
+                shotReady = true;
+            }
+        }
+
+        //if(playerCharacter.life <= 0)
+        // {
+        //    gameOver();
+        // }
+    }
+
+    void Sample_Scene::gameOver()
+    {
+        state = GAME_OVER;
     }
 
 }
