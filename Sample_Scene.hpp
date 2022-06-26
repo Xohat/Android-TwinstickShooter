@@ -54,8 +54,6 @@ namespace example
         float timerSpawn;
         float timerSinceSpawn;
 
-        //std::vector<Enemies::enemy> enemies;
-
         struct shootButton
         {
             Point2f Position = {1100,20};
@@ -68,7 +66,6 @@ namespace example
         {
             Vector2f Position;
             bool Pressed;
-            static const int InnerRadius = 10;
             static const int OuterRadius = 75;
             int ID;
             Vector2f deltaPosition;

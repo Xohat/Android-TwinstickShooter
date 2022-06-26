@@ -43,14 +43,6 @@ namespace Enemies
         Proyectile::bulletPool *activeBulletPool;
         PlayerRelated::player *playerCharacter;
 
-        enum typeOfEnemy
-        {
-            FOLLOW,
-            KAMIKAZE,
-        };
-
-        typeOfEnemy enemyType;
-
     public:
 
         enemy(PlayerRelated::player *playerReference, Proyectile::bulletPool *bulletPoolReference)
@@ -69,7 +61,6 @@ namespace Enemies
             Proyectile::bullet* bulletToDelete = checkCollissionBullet();
             if(bulletToDelete != nullptr)
             {
-                basics::log.d("BALA HIT");
                 takeDamage();
                 bulletToDelete->deactivate();
             }
@@ -77,14 +68,6 @@ namespace Enemies
 
         virtual void render (Canvas & canvas)
         {
-            /*
-            Size2f textureSize {enemyTexture->get_width(), enemyTexture->get_height()};
-            if(enemyTexture)
-            {
-                canvas->fill_rectangle (position, textureSize, enemyTexture);
-            }
-             */
-
             canvas.set_color(0.796875,0,0);
             canvas.fill_rectangle(position, {width,height});
         }
@@ -99,7 +82,6 @@ namespace Enemies
             }
         }
 
-        //Proyectile::bulletPool *bulletPoolToCheck
         Proyectile::bullet* checkCollissionBullet()
         {
             Proyectile::bullet* contactBullet = nullptr;
@@ -125,8 +107,6 @@ namespace Enemies
                 }
             }
 
-            //!contact;
-
             return contactBullet;
         }
 
@@ -139,9 +119,6 @@ namespace Enemies
 
             return !contact;
         }
-
-        //void setTexture (std::shared_ptr< Texture_2D > & new_texture);
-        void die(int numberToErase);
 
         void activate()
         {
@@ -276,113 +253,5 @@ namespace Enemies
         }
     };
 };
-
-/*
- * namespace Enemies
-{
-    void enemy::setTexture (std::shared_ptr< Texture_2D > & new_texture)
-    {
-        enemyTexture = new_texture;
-    }
-
-    void enemy::render(Canvas * canvas)
-    {
-        Size2f textureSize {enemyTexture->get_width(), enemyTexture->get_height()};
-        if(enemyTexture)
-        {
-            canvas->fill_rectangle (position, textureSize, enemyTexture);
-        }
-    }
-
-    bool enemy::checkCollission(Proyectile::bullet bulletToHit)
-    {
-        for (int i = 0; i < enemies.size(); ++i)
-        {
-            for (int j = 0; j < activeBulletPool->size(); ++j)
-            {
-                bool collision;
-
-                if(collision)
-                {
-                    if(enemies[i].life > 0)
-                    {
-                        takeDamage();
-                    }
-
-                    else
-                    {
-                        die(i);
-                    }
-                }
-            }
-        }
-    }
-
-    void enemy::die(int numberToErase)
-    {
-        enemies.erase(enemies, numberToErase);
-    }
-
-    bool enemy::takeDamage()
-    {
-        for (int i = 0; i < enemies.size(); ++i)
-        {
-            enemies[i].life -= 1;
-
-            if(enemies[i].life <= 0)
-            {
-                return enemies[i].deathState = true;
-            }
-        }
-    }
-
-    void enemyFollow::update(float delta)
-    {
-
-    }
-
-    void enemyKamikaze::update(float delta)
-    {
-        switch(currentState)
-        {
-            case looking:
-                lookingState(delta);
-                break;
-            case launch:
-                launchState(delta);
-                break;
-        }
-    }
-
-    void enemyKamikaze::lookingState(float delta)
-    {
-        waitTime -= delta;
-
-        float incY = playerCharacter->position.coordinates.y() - position.coordinates.y();
-        float incX = playerCharacter->position.coordinates.x() - position.coordinates.x();
-
-        rotation = atan2(incX, incY);
-
-        if(waitTime <= 0)
-        {
-            currentState = launch;
-        }
-    }
-
-    void enemyKamikaze::launchState(float delta)
-    {
-        waitTime = 1;
-
-        position.coordinates.x() += cos(rotation) * speed * delta;
-        position.coordinates.y() += sin(rotation) * speed * delta;
-
-        if(position.coordinates.y() - halfHeight < 0 || position.coordinates.y() + halfHeight > canvas_width||
-           position.coordinates.x() - halfWidth < 0 || position.coordinates.x() + halfWidth > canvas_height)
-        {
-            currentState = looking;
-        }
-    }
-}
- */
 
 #endif //BASICS_PROJECT_TEMPLATE_ENEMY_H

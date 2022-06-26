@@ -31,29 +31,16 @@ namespace Proyectile
     {
         if(activeState)
         {
-            //position.coordinates.x() += cos(rotation) * speed * delta;
             position.coordinates.y() += sin(rotation) * speed * delta;
         }
     }
 
-    void bullet::setTexture(std::shared_ptr< Texture_2D > & new_texture)
-    {
-        bulletTexture = new_texture;
-    }
-
     void bullet::render(Canvas & canvas)
     {
-        //Size2f textureSize {bulletTexture->get_width(), bulletTexture->get_height()};
         Size2f textureSize {width, height};
 
         canvas.set_color(0.796875,0.796875,0);
         canvas.fill_rectangle (position, textureSize);
-        /*
-        if(bulletTexture)
-        {
-
-        }
-         */
     }
 
     bulletPool::bulletPool(int initialSize, float canvas_width, float canvas_height)

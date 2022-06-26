@@ -42,7 +42,6 @@ namespace PlayerRelated
         float invincibilityTime;
         bool pain;
         int speed;
-        float shotCooldown;
 
     public:
 
@@ -70,34 +69,21 @@ namespace PlayerRelated
         void update (float delta)
         {
             invincibility(delta);
-            //direction = Vector2f(1, 0);
             position += direction * delta * speed;
-        }
-
-        void setTexture (shared_ptr< Texture_2D > & new_texture)
-        {
-            playerTexture = new_texture;
         }
 
         void render (Canvas & canvas)
         {
-            //Size2f textureSize {playerTexture->get_width(), playerTexture->get_height()};
             Size2f size {width, height};
             canvas.set_color(1,1,1);
             canvas.fill_rectangle (position, size);
-            /*
-            if(playerTexture)
-            {
-
-            }
-             */
         }
 
         void damage()
         {
             if(pain == false)
             {
-                pain = true;
+                pain = true;    ///< Activa el booleano para no recibir daño
                 life -= 1;
 
                 if (life == 0)
@@ -109,7 +95,7 @@ namespace PlayerRelated
 
         void invincibility(float delta)
         {
-            if (pain == true)
+            if (pain == true) ///< Se comprueba el booleano
             {
                 invincibilityTime -= delta;
 
@@ -124,10 +110,3 @@ namespace PlayerRelated
 }
 
 #endif //BASICS_PROJECT_TEMPLATE_PLAYER_H
-
-/*
-namespace PlayerData
-{
-
-};
- */

@@ -26,7 +26,6 @@ namespace Proyectile
 
     public:
 
-        std::shared_ptr<basics::Texture_2D> bulletTexture;
         float width;
         float height;
         float speed;
@@ -37,7 +36,6 @@ namespace Proyectile
         float rotation;
 
         void update (float delta);
-        void setTexture (std::shared_ptr< Texture_2D > & new_texture);
         void render (Canvas & canvas);
 
         void activate();
