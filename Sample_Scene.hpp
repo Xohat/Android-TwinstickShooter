@@ -97,9 +97,20 @@ namespace example
 
     private:
 
+        bool aspect_ratio_adjusted;
         void load ();
         void run  (float time);
         void gameOver();
+
+        void adjustAspectRatio(basics::Graphics_Context::Accessor & context)
+        {
+            if (!aspect_ratio_adjusted)
+            {
+                float real_aspect_ratio = float( context->get_surface_width () ) / context->get_surface_height ();
+                canvas_width = unsigned( canvas_height * real_aspect_ratio );
+                aspect_ratio_adjusted = true;
+            }
+        }
 
     };
 

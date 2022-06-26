@@ -31,14 +31,22 @@ namespace example
         enemyPoolSpawner = new Enemies::enemyPool(5, canvas_width, canvas_height, playerCharacter, playerBulletPool);
         timerSpawn = 4;
         timerSinceSpawn = 0;
+        aspect_ratio_adjusted = false;
+
+        state     = LOADING;
+        x         = 640;
+        y         = 360;
     }
 
     bool Sample_Scene::initialize ()
     {
-        state     = LOADING;
         suspended = false;
+
+        /*
+        state     = LOADING;
         x         = 640;
         y         = 360;
+         */
 
         return true;
     }
@@ -114,7 +122,6 @@ namespace example
                     if(id == shootCircle.ID) shootCircle.Pressed = false; //else
                     if(id == joystickHandler.ID)
                     {
-                        playerCharacter->position = Vector2f (canvas_width/2, canvas_height/2);
                         playerCharacter->direction = Vector2f (0, 0);
                         joystickHandler.Pressed = false;
 
@@ -151,7 +158,7 @@ namespace example
                 canvas->clear        ();
                 Vector3f backgroundColor(0, 0.19921875, 0.3984375);
                 canvas->set_color    (backgroundColor[0], backgroundColor[1], backgroundColor[2]);
-                canvas->fill_rectangle({ 0, 0 }, { 1280, 720 });
+                canvas->fill_rectangle({ 0, 0 }, { canvas_width / 1.f, canvas_height / 1.f });
 
                 if(shootCircle.Pressed)
                 {
@@ -246,10 +253,12 @@ namespace example
                 }
                  */
 
-                playerCharacter->position = {canvas_width/2, canvas_height/2};
+                adjustAspectRatio(context);
 
-                if(textureActivationCount == 2)
+                if(aspect_ratio_adjusted && textureActivationCount == 2)
                 {
+                    shootCircle.Position = Vector2f (canvas_width - 150, 20);
+                    playerCharacter->position = {canvas_width/2, canvas_height/2};
                     state = RUNNING;
                 }
             }
