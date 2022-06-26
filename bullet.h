@@ -45,7 +45,7 @@ namespace Proyectile
     class bulletPool
     {
     public:
-        //bulletPool();
+
         bulletPool(int initialSize, float canvas_width, float canvas_height);
         std::vector<bullet> bullets;
         float canvas_width;
@@ -58,7 +58,6 @@ namespace Proyectile
     private:
 
     };
-
 };
 
 #endif //BASICS_PROJECT_TEMPLATE_BULLET_H

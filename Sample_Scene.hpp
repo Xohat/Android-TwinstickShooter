@@ -19,7 +19,6 @@ namespace example
 {
     using basics::Point2f;
     using basics::Vector2f;
-    using Proyectile::bulletPool;
 
     class Sample_Scene : public basics::Scene
     {
@@ -47,8 +46,8 @@ namespace example
         Texture_Handle playerTexture;
         Texture_Handle bulletTexture;
 
+        PlayerRelated::player *playerCharacter;
         Proyectile::bulletPool *playerBulletPool;
-        //Player::player playerCharacter;
         bool shotReady = true;
         float shotCooldown = 0.8;
 

@@ -27,7 +27,8 @@ namespace example
         canvas_width  = 1280;
         canvas_height =  720;
         playerBulletPool = new Proyectile::bulletPool(16, canvas_width, canvas_height);
-        //playerCharacter = Player::player();
+        //playerCharacter = new player{1};
+        playerCharacter = new PlayerRelated::player();
     }
 
     bool Sample_Scene::initialize ()
@@ -57,7 +58,7 @@ namespace example
             int id = *event[ID(id)].as< var::Int32 > ();
             float x = *event[ID(x) ].as< var::Float > ();
             float y = *event[ID(y) ].as< var::Float > ();
-            Vector2f touchPosition{x,y};
+            //Vector2f touchPosition{x,y};
 
             switch (event.id)
             {
@@ -74,7 +75,7 @@ namespace example
 
                                 if(shotReady)
                                 {
-                                    playerBulletPool->spawnBullet({10,50}, 90);
+                                    playerBulletPool->spawnBullet({playerCharacter->position.coordinates.x() + 50,playerCharacter->position.coordinates.y() + 100}, 90);
                                     shotReady = false;
                                 }
                             }
@@ -97,8 +98,11 @@ namespace example
                     if(joystickHandler.Pressed)
                     {
                         joystickHandler.deltaPosition = Vector2f(x,y);
-                        Vector2f playerMovement = Vector2f (joystickHandler.deltaPosition - joystickHandler.Position);
-                        //playerCharacter->direction += playerMovement;
+                        Vector2f joystickMovement;
+                        joystickMovement = Vector2f (joystickHandler.deltaPosition.coordinates.x() - joystickHandler.Position.coordinates.x() , joystickHandler.deltaPosition.coordinates.y()  - joystickHandler.Position.coordinates.y());
+                        //basics::log.d("joystickMovement X: " + to_string(joystickMovement.coordinates.x())  + ",Y: " + to_string(joystickMovement.coordinates.y()));
+                        joystickMovement.normalize();
+                        playerCharacter->direction = joystickMovement;
                     }
 
                     break;
@@ -107,7 +111,13 @@ namespace example
                 case ID(touch-ended):
                 {
                     if(id == shootCircle.ID) shootCircle.Pressed = false; //else
-                    if(id == joystickHandler.ID) joystickHandler.Pressed = false;
+                    if(id == joystickHandler.ID)
+                    {
+                        playerCharacter->position = Vector2f (canvas_width/2, canvas_height/2);
+                        playerCharacter->direction = Vector2f (0, 0);
+                        joystickHandler.Pressed = false;
+
+                    }
 
                     break;
                 }
@@ -172,7 +182,7 @@ namespace example
 
                 playerBulletPool->render(*canvas);
 
-                //playerCharacter.render(canvas);
+                playerCharacter->render(*canvas);
 
                 if(state == GAME_OVER)
                 {
@@ -231,6 +241,8 @@ namespace example
                 }
                  */
 
+                playerCharacter->position = {canvas_width/2, canvas_height/2};
+
                 if(textureActivationCount == 2)
                 {
                     state = RUNNING;
@@ -242,6 +254,7 @@ namespace example
     void Sample_Scene::run (float time)
     {
         playerBulletPool->update(time);
+        playerCharacter->update(time);
 
         if(!shotReady)
         {
@@ -253,6 +266,47 @@ namespace example
                 shotReady = true;
             }
         }
+
+        if(playerCharacter->position.coordinates.x() < 0)
+        {
+            playerCharacter->position.coordinates.x() = canvas_width - 1;
+        }
+
+        if(playerCharacter->position.coordinates.y() < 0)
+        {
+            playerCharacter->position.coordinates.y() = canvas_height - 1;
+        }
+
+        else if(playerCharacter->position.coordinates.x() > canvas_width)
+        {
+            playerCharacter->position.coordinates.x() = 1;
+        }
+
+        if(playerCharacter->position.coordinates.y() > canvas_height)
+        {
+            playerCharacter->position.coordinates.y() = 1;
+        }
+
+        /*
+        if(playerCharacter->life > 0)
+        {
+            for (int i = 0; i < enemies.size(); ++i)
+            {
+                bool notCollision;
+
+                if(!notCollision)
+                {
+                    playerCharacter->damage();
+                    playerCharacter->invincibility(time);
+                }
+            }
+        }
+
+        if(playerCharacter->life <= 0)
+        {
+            gameOver();
+        }
+         */
 
         /*
         if(enemies[i].position.coordinates.x() < 0)
@@ -274,32 +328,7 @@ namespace example
         {
             enemies[i].position[1] = 0;
         }
-
-        if(playerCharacter.position.coordinates.x() < 0)
-        {
-            playerCharacter.position = canvas_width;
-        }
-
-        if(playerCharacter.position.coordinates.y() < 0)
-        {
-            playerCharacter.position = canvas_height;
-        }
-
-        else if(enemies[i].position.coordinates.x() > canvas_width)
-        {
-            playerCharacter.position = 0;
-        }
-
-        if(playerCharacter.position.coordinates.y() > canvas_height)
-        {
-            playerCharacter.position = 0;
-        }
-         /*
-
-        //if(playerCharacter.life <= 0)
-        // {
-        //    gameOver();
-        // }
+         */
     }
 
     void Sample_Scene::gameOver()
