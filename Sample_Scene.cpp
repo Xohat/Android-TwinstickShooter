@@ -56,6 +56,7 @@ namespace example
             int id = *event[ID(id)].as< var::Int32 > ();
             float x = *event[ID(x) ].as< var::Float > ();
             float y = *event[ID(y) ].as< var::Float > ();
+            Vector2f touchPosition{x,y};
 
             switch (event.id)
             {
@@ -63,15 +64,21 @@ namespace example
                 {
                     if(x > canvas_width * 0.5f)
                     {
-                        shootCircle.Position = Point2f{x,y};
-                        shootCircle.Pressed = true;
-                        shootCircle.ID = id;
-                        playerBulletPool->spawnBullet({10,50}, 90);
+                        if(x > shootCircle.Position.coordinates.x() && x < shootCircle.Position.coordinates.x() + shootCircle.Radius*2)
+                        {
+                            if(y > shootCircle.Position.coordinates.y() && y < shootCircle.Position.coordinates.y() + shootCircle.Radius*2)
+                            {
+                                shootCircle.Pressed = true;
+                                shootCircle.ID = id;
+                                playerBulletPool->spawnBullet({10,50}, 90);
+                            }
+                        }
                     }
 
                     else
                     {
                         joystickHandler.Position = Vector2f{x,y};
+                        joystickHandler.deltaPosition = Vector2f{x,y};
                         joystickHandler.Pressed = true;
                         joystickHandler.ID = id;
                     }
@@ -132,14 +139,30 @@ namespace example
 
                 if(shootCircle.Pressed)
                 {
+                    canvas->set_color    (128/256,128/256,128/256);
                     canvas->fill_rectangle(shootCircle.Position, { 100, 100 });
                 }
+
+                else
+                    {
+                        canvas->set_color    (1, 1, 1);
+                        canvas->fill_rectangle(shootCircle.Position, { 100, 100 });
+                    }
 
                 if(joystickHandler.Pressed)
                 {
                     canvas->fill_rectangle(joystickHandler.Position, { 100, 100 });
-                    canvas->fill_rectangle(joystickHandler.deltaPosition, { 100, 100 });
-                    //if(joystickHandler.deltaPosition >)
+
+                    if(joystickHandler.deltaPosition.coordinates.x() < joystickHandler.Position.coordinates.x() + joystickHandler.OuterRadius &&
+                       joystickHandler.deltaPosition.coordinates.y() < joystickHandler.Position.coordinates.y() + joystickHandler.OuterRadius)
+                    {
+                        canvas->fill_rectangle(joystickHandler.deltaPosition, { 100, 100 });
+                    }
+
+                    else
+                        {
+                            canvas->fill_rectangle(joystickHandler.deltaPosition, { 100, 100 });
+                        }
                 }
 
                 playerBulletPool->render(*canvas);

@@ -51,11 +51,10 @@ namespace example
 
         struct shootButton
         {
-            Point2f Position;
+            Point2f Position = {1100,20};
             bool Pressed;
             static const int Radius = 50;
             int ID;
-
         };
 
         struct joystick

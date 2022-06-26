@@ -58,8 +58,6 @@ namespace Proyectile
         this->canvas_width = canvas_width;
         this->canvas_height = canvas_height;
 
-        //bullets.resize(initialSize);
-
         for (std::size_t i = 0; i < initialSize; i++)
         {
             bullet bulletToStudy = Proyectile::bullet();
