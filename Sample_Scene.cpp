@@ -254,6 +254,48 @@ namespace example
             }
         }
 
+        /*
+        if(enemies[i].position.coordinates.x() < 0)
+        {
+            enemies[i].position[0] = canvas_width;
+        }
+
+        if(enemies[i].position.coordinates.y() < 0)
+        {
+            enemies[i].position[1] = canvas_height;
+        }
+
+        else if(enemies[i].position.coordinates.x() > canvas_width)
+        {
+            enemies[i].position[0] = 0;
+        }
+
+        if(enemies[i].position.coordinates.y() > canvas_height)
+        {
+            enemies[i].position[1] = 0;
+        }
+
+        if(playerCharacter.position.coordinates.x() < 0)
+        {
+            playerCharacter.position = canvas_width;
+        }
+
+        if(playerCharacter.position.coordinates.y() < 0)
+        {
+            playerCharacter.position = canvas_height;
+        }
+
+        else if(enemies[i].position.coordinates.x() > canvas_width)
+        {
+            playerCharacter.position = 0;
+        }
+
+        if(playerCharacter.position.coordinates.y() > canvas_height)
+        {
+            playerCharacter.position = 0;
+        }
+         /*
+
         //if(playerCharacter.life <= 0)
         // {
         //    gameOver();
@@ -264,5 +306,4 @@ namespace example
     {
         state = GAME_OVER;
     }
-
 }
