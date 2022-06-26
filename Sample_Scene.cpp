@@ -27,8 +27,10 @@ namespace example
         canvas_width  = 1280;
         canvas_height =  720;
         playerBulletPool = new Proyectile::bulletPool(16, canvas_width, canvas_height);
-        //playerCharacter = new player{1};
         playerCharacter = new PlayerRelated::player();
+        enemyPoolSpawner = new Enemies::enemyPool(5, canvas_width, canvas_height, playerCharacter, playerBulletPool);
+        timerSpawn = 4;
+        timerSinceSpawn = 0;
     }
 
     bool Sample_Scene::initialize ()
@@ -100,7 +102,6 @@ namespace example
                         joystickHandler.deltaPosition = Vector2f(x,y);
                         Vector2f joystickMovement;
                         joystickMovement = Vector2f (joystickHandler.deltaPosition.coordinates.x() - joystickHandler.Position.coordinates.x() , joystickHandler.deltaPosition.coordinates.y()  - joystickHandler.Position.coordinates.y());
-                        //basics::log.d("joystickMovement X: " + to_string(joystickMovement.coordinates.x())  + ",Y: " + to_string(joystickMovement.coordinates.y()));
                         joystickMovement.normalize();
                         playerCharacter->direction = joystickMovement;
                     }
@@ -184,6 +185,10 @@ namespace example
 
                 playerCharacter->render(*canvas);
 
+                enemyPoolSpawner->render(*canvas);
+
+                //testEnemy->render(*canvas);
+
                 if(state == GAME_OVER)
                 {
                     canvas->fill_rectangle ({ canvas_width / 2.f, canvas_height / 2.f }, { 100, 60 });
@@ -255,6 +260,23 @@ namespace example
     {
         playerBulletPool->update(time);
         playerCharacter->update(time);
+        enemyPoolSpawner->update(time);
+
+        timerSinceSpawn += time;
+
+        if(timerSinceSpawn >= timerSpawn)
+        {
+            timerSinceSpawn = 0;
+            enemyPoolSpawner->spawnEnemy({500,500}, 0);
+            enemyPoolSpawner->spawnEnemy({200,500}, 0);
+            enemyPoolSpawner->spawnEnemy({800,500}, 0);
+        }
+
+        if(enemyPoolSpawner->checkCollisionWithPlayer())
+        {
+            playerCharacter->damage();
+            basics::log.d(to_string(playerCharacter->life));
+        }
 
         if(!shotReady)
         {
@@ -287,48 +309,10 @@ namespace example
             playerCharacter->position.coordinates.y() = 1;
         }
 
-        /*
-        if(playerCharacter->life > 0)
-        {
-            for (int i = 0; i < enemies.size(); ++i)
-            {
-                bool notCollision;
-
-                if(!notCollision)
-                {
-                    playerCharacter->damage();
-                    playerCharacter->invincibility(time);
-                }
-            }
-        }
-
         if(playerCharacter->life <= 0)
         {
             gameOver();
         }
-         */
-
-        /*
-        if(enemies[i].position.coordinates.x() < 0)
-        {
-            enemies[i].position[0] = canvas_width;
-        }
-
-        if(enemies[i].position.coordinates.y() < 0)
-        {
-            enemies[i].position[1] = canvas_height;
-        }
-
-        else if(enemies[i].position.coordinates.x() > canvas_width)
-        {
-            enemies[i].position[0] = 0;
-        }
-
-        if(enemies[i].position.coordinates.y() > canvas_height)
-        {
-            enemies[i].position[1] = 0;
-        }
-         */
     }
 
     void Sample_Scene::gameOver()

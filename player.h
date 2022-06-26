@@ -38,8 +38,6 @@ namespace PlayerRelated
 
         shared_ptr<basics::Texture_2D> playerTexture;
 
-        int width;
-        int height;
         bool deathState;
         float invincibilityTime;
         bool pain;
@@ -48,6 +46,8 @@ namespace PlayerRelated
 
     public:
 
+        float width;
+        float height;
         float rotation;
         Vector2f position;
         Vector2f direction;
@@ -56,14 +56,14 @@ namespace PlayerRelated
         player()
         {
             position = Vector2f (0,0);
-            width = 0;
-            height = 0;
+            width = 100;
+            height = 100;
             rotation = 0;
             life = 3;
             deathState = false;
             invincibilityTime = 5;
             pain = false;
-            speed = 150;
+            speed = 300;
             direction = Vector2f (0,0);
         }
 
@@ -82,8 +82,8 @@ namespace PlayerRelated
         void render (Canvas & canvas)
         {
             //Size2f textureSize {playerTexture->get_width(), playerTexture->get_height()};
-            Size2f textureSize {100, 100};
-            canvas.fill_rectangle (position - Vector2f (textureSize[0]/2,textureSize[1]/2), textureSize);
+            Size2f size {width, height};
+            canvas.fill_rectangle (position, size);
             /*
             if(playerTexture)
             {
@@ -92,7 +92,7 @@ namespace PlayerRelated
              */
         }
 
-        bool damage()
+        void damage()
         {
             if(pain == false)
             {
@@ -101,7 +101,7 @@ namespace PlayerRelated
 
                 if (life == 0)
                 {
-                    return deathState = true;
+                    deathState = true;
                 }
             }
         }
@@ -110,12 +110,11 @@ namespace PlayerRelated
         {
             if (pain == true)
             {
-                float invTime;
-                invTime -= delta;
+                invincibilityTime -= delta;
 
-                if(invTime <= 0)
+                if(invincibilityTime <= 0)
                 {
-                    invTime = 4;
+                    invincibilityTime = 4;
                     pain = false;
                 }
             }

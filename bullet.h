@@ -27,6 +27,8 @@ namespace Proyectile
     public:
 
         std::shared_ptr<basics::Texture_2D> bulletTexture;
+        float width;
+        float height;
         float speed;
         float dmgPower;
         bullet();

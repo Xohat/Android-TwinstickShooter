@@ -23,6 +23,8 @@ namespace Proyectile
         speed = 0.5;
         dmgPower = 1;
         activeState = false;
+        width = 10;
+        height = 30;
     }
 
     void bullet::update(float delta)
@@ -42,7 +44,7 @@ namespace Proyectile
     void bullet::render(Canvas & canvas)
     {
         //Size2f textureSize {bulletTexture->get_width(), bulletTexture->get_height()};
-        Size2f textureSize {100, 200};
+        Size2f textureSize {width, height};
 
         canvas.fill_rectangle (position, textureSize);
         /*

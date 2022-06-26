@@ -10,6 +10,7 @@
 
 #include "bullet.h"
 #include "player.h"
+#include "enemy.h"
 #include <memory>
 #include <basics/Scene>
 #include <basics/Vector>
@@ -22,7 +23,6 @@ namespace example
 
     class Sample_Scene : public basics::Scene
     {
-
         typedef std::shared_ptr< basics::Texture_2D > Texture_Handle;
 
     public:
@@ -46,10 +46,13 @@ namespace example
         Texture_Handle playerTexture;
         Texture_Handle bulletTexture;
 
+        Enemies::enemyPool *enemyPoolSpawner;
         PlayerRelated::player *playerCharacter;
         Proyectile::bulletPool *playerBulletPool;
         bool shotReady = true;
-        float shotCooldown = 0.8;
+        float shotCooldown = 0.1;
+        float timerSpawn;
+        float timerSinceSpawn;
 
         //std::vector<Enemies::enemy> enemies;
 
